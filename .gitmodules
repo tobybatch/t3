@@ -1,0 +1,3 @@
+[submodule "template3"]
+	path = template3
+	url = git@github.com:CarltonSoftware/template3.git
