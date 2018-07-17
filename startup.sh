@@ -1,10 +1,5 @@
 #!/bin/bash -x
 
-if [ -z ${T3_API_URL} ] || [ -z ${T3_API_KEY} ] || [ -z ${T3_API_SECRET} ] || [ -z ${T3_API_USERNAME} ] || [ -z ${T3_API_PASSWORD} ]; then
-    echo "Missing environment variables"
-    exit 1;
-fi
-
 # If we have a dump then install it.
 if [ -e /tmp/dump.sql ]; then
     drush sqlc < /tmp/dump.sql
@@ -29,15 +24,6 @@ if [ ! -z "${T3_MODULES_ON}" ]; then
     echo -e "\nTurning on modules ${T3_MODULES_ON}"
     vendor/bin/drush --no-ansi --pipe en -y ${T3_MODULES_ON}
 fi
-
-echo -e "\nSetting API connection details."
-set -x
-vendor/bin/drush -y cset tabsapi.connection url ${T3_API_URL}
-vendor/bin/drush -y cset tabsapi.connection username ${T3_API_USERNAME}
-vendor/bin/drush -y cset tabsapi.connection password ${T3_API_PASSWORD}
-vendor/bin/drush -y cset tabsapi.connection key ${T3_API_KEY}
-vendor/bin/drush -y cset tabsapi.connection secret ${T3_API_SECRET}
-set +x
 
 touch /opt/drupal/started
 

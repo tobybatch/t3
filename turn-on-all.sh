@@ -5,4 +5,5 @@ for x in $(find /opt/drupal/web/modules/custom/ -name "*.info.yml" -exec basenam
     MODULES="$MODULES $x";
 done
 
+
 /opt/drupal/vendor/bin/drush -r /opt/drupal en -y $MODULES

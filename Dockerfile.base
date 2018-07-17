@@ -17,6 +17,7 @@ RUN wget -O /tmp/composer-setup.php https://getcomposer.org/installer \
         libpng-dev \
         libjpeg-turbo-dev \
         mysql \
+        nodejs-npm \
         openldap-dev \
         sqlite \
         sqlite-dev \
@@ -103,20 +104,19 @@ RUN vendor/bin/drush \
     --db-url=sqlite://sites/default/files/.ht.sqlite \
     --account-pass=planetcrownceilingemerald
 
+WORKDIR web/themes/custom/template3themes
+RUN npm config set loglevel warn && npm install --global gulp && npm install && gulp
+WORKDIR /opt/drupal
+
 RUN vendor/bin/drush config-set "system.site" uuid "${SYSTEM_SITE_UUID}"
 COPY drushrc.php /etc/drush/drushrc.php
-RUN echo "\$settings['trusted_host_patterns'] = [ '^localhost$', '^127.0.0.1$', '^0.0.0.0$', '.*', ];" >> web/sites/default/settings.php
-
-RUN ./vendor/bin/drush pmu -y search
-COPY turn-on-all.sh /tmp/turn-on-all.sh
-RUN /tmp/turn-on-all.sh
-
+RUN echo "\$settings['trusted_host_patterns'] = [ '^localhost$', '^127.0.0.1$', '^0.0.0.0$', '.*', '^goodlife.localhost$', ];" >> web/sites/default/settings.php
 
 # Replace site wide drush/drupal with install specifics.
 ENV PATH=/opt/drupal/vendor/bin:${PATH}
 CMD ["/bin/bash"]
 
-# docker build --rm -t neonkvm:5000/t3_base_drupal -f Dockerfile.base .
+# docker build --rm -t neonkvm:5000/t3_base_drupal --no-cache -f Dockerfile.base .
 
 # docker run -ti -p 8989:8989 --name t3-base --rm neonkvm:5000/t3_base_drupal
 # docker exec -ti t3-base vendor/bin/drush upwd admin password=XXXXX # Won't persist
