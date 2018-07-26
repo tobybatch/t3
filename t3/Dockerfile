@@ -1,4 +1,4 @@
-FROM neonkvm:5000/t3_base_drupal:latest
+FROM t3_base_drupal
 
 LABEL maintainer tobias@neontribe.co.uk
 

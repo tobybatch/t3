@@ -1,0 +1,46 @@
+version: '3'
+services:
+    db:
+        image: mysql:5.6
+        environment:
+            MYSQL_USER: lamp
+            MYSQL_PASSWORD: lamp
+            MYSQL_DATABASE: lamp
+            MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+        volumes:
+            - ./mysql-datadir:/var/lib/mysql
+        restart: always
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            interval: 20s
+            retries: 10
+
+    base:
+        build: ./base
+        image: t3_base_drupal
+
+    t3:
+        build: ./t3
+        image: t3
+        links:
+            - db
+        ports:
+            - "${T3_PORT}:${T3_PORT}"
+        depends_on:
+            - db
+        environment:
+            MYSQL_USER: lamp
+            MYSQL_PASSWORD: lamp
+            MYSQL_DATABASE: lamp
+            MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+            T3_API_USERNAME: ${T3_API_USERNAME}
+            T3_API_PASSWORD: ${T3_API_PASSWORD}
+            T3_API_KEY: ${T3_API_KEY}
+            T3_API_SECRET: ${T3_API_SECRET}
+            T3_API_URL: ${T3_API_URL}
+            T3_PORT: ${T3_PORT}
+        volumes:
+            - ./Tabs2ApiDrupal8Modules:/opt/drupal/web/modules/custom/tabs2apidrupal8Modules
+            - ./template3themes:/opt/drupal/web/themes/custom/template3themes
+            - ./tabs2-php-client:/opt/drupal/vendor/carltonsoftware/tabs2-php-client
+            - ./config:/opt/drupal/web/modules/custom/config

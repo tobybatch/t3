@@ -1,3 +1,12 @@
 [submodule "template3"]
-	path = template3
+	path = base/template3
 	url = git@github.com:CarltonSoftware/template3.git
+[submodule "Tabs2ApiDrupal8Modules"]
+	path = Tabs2ApiDrupal8Modules
+	url = git@github.com:CarltonSoftware/Tabs2ApiDrupal8Modules.git
+[submodule "template3themes"]
+	path = template3themes
+	url = git@github.com:CarltonSoftware/template3themes.git
+[submodule "tabs2-php-client"]
+	path = tabs2-php-client
+	url = git@github.com:CarltonSoftware/tabs2-php-client.git
